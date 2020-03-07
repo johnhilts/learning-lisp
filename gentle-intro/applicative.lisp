@@ -174,3 +174,104 @@
 (defun show-high-card (hand)
   "what's the highest ranked card in a hand?"
   (car (remove-if-not #'(lambda (l) l) (mapcar #'(lambda (rank) (find-if #'(lambda (card) (equal rank (my-rank card))) hand)) (reverse **all-ranks**)))))
+
+(defun all-odd? (l)
+  "are all the numbers in a list odd?"
+  (every #'oddp l))
+
+(defun none-odd? (l)
+  "are none of the numbers odd?"
+  (every #'(lambda (e) (not (oddp e))) l))
+
+(defun not-all-odd? (l)
+  "return t if at least one !odd"
+  (not (every #'oddp l)))
+
+(defun not-none-odd? (l)
+  "return t if at least one odd"
+  #||
+  this doesn't work because (every nil) returns t
+  (every #'oddp (remove-if-not #'oddp l)))
+  ||#
+  (not (equal nil (find-if #'oddp l))))
+
+(defvar **block-database**
+      '((b1 shape brick)
+	(b1 color green)
+	(b1 size small)
+	(b1 supported-by b2)
+	(b1 supported-by b3)
+	(b2 shape brick)
+	(b2 color red)
+	(b2 size small)
+	(b2 supports b1)
+	(b2 left-of b3)
+	(b3 shape brick)
+	(b3 color red)
+	(b3 size small)
+	(b3 supports b1)
+	(b3 right-of b2)
+	(b4 shape pyramid)
+	(b4 color blue)
+	(b4 size large)
+	(b4 supported-by b5)
+	(b5 shape cube)
+	(b5 color green)
+	(b5 size large)
+	(b5 supports b4)
+	(b6 shape brick)
+	(b6 color purple)
+	(b6 size large)))
+
+(defun match-element? (e1 e2)
+  "e1 == e2 || e2 == '?'"
+  (or
+   (equal e1 '?)
+   (equal e2 '?)
+   (equal e1 e2)))
+
+(defun match-triple? (assertion pattern)
+  "does assertion match the pattern?"
+  (and
+   (match-element? (car assertion) (car pattern))
+   (match-element? (cadr assertion) (cadr pattern))
+   (match-element? (caddr assertion) (caddr pattern))))
+
+#||
+(FETCH '(B2 COLOR ?)) should  return  ((B2  COLOR  RED)),  
+(FETCH '(? SUPPORTS B1)) should return ((B2 SUPPORTS B1) (B3 SUPPORTS B1))
+||#
+
+(defun fetch (pattern)
+  "return all entries from the database that match the pattern"
+  (remove-if-not #'(lambda (e) (match-triple? e pattern)) **block-database**))
+
+(defun get-color-pattern-for-block (block)
+  "get color pattern for a block"
+  (cons block '(color ?)))
+
+(defun get-block-supporters (block)
+  "make a list of supporters for a block"
+  (mapcar #'(lambda (e) (car e)) (fetch (list '? 'supports block))))
+
+(defun supported=by-cubes? (block)
+  "is a block supported by cubes?"
+  (every #'(lambda (e) e) (mapcar #'(lambda (e) (fetch (list e 'shape 'cube))) (get-block-supporters block))))
+
+(defun block-description1 (block)
+  "get all assertions matching a block"
+  (fetch (list block '? '?)))
+
+(defun block-description2 (block)
+  "get all assertions matching a block, with block name stripped"
+  (mapcar #'(lambda (e) (cdr e)) (block-description1 block)))
+
+(defun block-description (block)
+  "get block description"
+  (reduce #'(lambda (acc e) (append acc e)) (block-description2 block)))
+
+(defun anyoddp? (x)
+  "any odds?"
+  (if (null x) nil
+      (if (oddp (car x)) t
+	  (anyoddp? (cdr x)))))
