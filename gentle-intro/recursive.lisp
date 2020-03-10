@@ -78,3 +78,26 @@
   "count down from a number with a different kind of recursion"
   (cond ((equal 0 number) '(0))
 	(t (append (list number) (do-another-count-down (- number 1))))))
+
+(defun do-a-count-down-to-1 (number)
+  "only count down to 1"
+  (cond ((equal 1 number) '(1))
+	(t (cons number (do-a-count-down-to-1 (- number 1))))))
+
+(defun get-squares-for-list-with-cons (list)
+  "return a list of squares based on input list using cons"
+  (cond ((null list) nil)
+	(t (cons (* (car list) (car list)) (get-squares-for-list (cdr list))))))
+
+(defun get-squares-for-list (list)
+  "return a list of squares based on input list using cons"
+  (cond ((null list) nil)
+	(t (append (list (* (car list) (car list))) (get-squares-for-list (cdr list))))))
+
+(defun recursive-compare-list-lengths (list1 list2)
+  "compare the length of 2 lists recursively"
+  (cond ((and (null list1) (null list2)) 'same-length)
+	((null list1) 'second-is-longer)
+	((null list2) 'first-is-longer)
+	(t (recursive-compare-list-lengths (cdr list1) (cdr list2)))))
+
