@@ -101,3 +101,29 @@
 	((null list2) 'first-is-longer)
 	(t (recursive-compare-list-lengths (cdr list1) (cdr list2)))))
 
+(defun sum-numeric-elements-only (list)
+  "sum up any numeric elements in a list using recursion"
+  (cond ((null list) 0)
+	((not (numberp (car list))) (sum-numeric-elements-only (cdr list)))
+	(t (+ (car list) (sum-numeric-elements-only (cdr list))))))
+
+(defun my-recursive-remove (item list)
+  "recursively remove an item from a list"
+  (cond ((null list) nil)
+	((equal item (car list)) (my-recursive-remove item (cdr list)))
+	(t (append (list (car list)) (my-recursive-remove item (cdr list))))))
+
+(defun my-recursive-intersection (list1 list2)
+  "implement intersection with recursion"
+  (cond ((null list1) nil)
+	((member (car list1) list2) (append (list (car list1)) (my-recursive-intersection (cdr list1) list2)))
+	(t (my-recursive-intersection (cdr list1) list2))))
+
+(defun my-recursive-intersection-for-tco (list1 list2)
+  "trying an ML style version more suited for TCO"
+  (remove-if #'null
+	     (append
+	      (if (member (car list1) list2) (list (car list1)) (list nil))
+	      (cond ((null list1) (list nil))
+		    (t (my-recursive-intersection-for-tco (cdr list1) list2))))))
+
