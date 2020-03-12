@@ -170,7 +170,10 @@ so that also means, according to this, that () is NOT a cons cell - true??
 	(t (+ (my-sum-tree (car tree)) (my-sum-tree (cdr tree))))))
 
 (defun my-subst (new old list)
-  "recursive version of subst - do we need to handle nested??"
+  "recursive version of subst - do we need to handle nested?? - why, yes!"
   (cond ((null list) nil)
 	((equal (car list) old) (cons new (my-subst new old (cdr list))))
-	(t (cons (car list) (my-subst new old (cdr list))))))
+	(t
+	 (cons
+	  (if (listp (car list)) (my-subst new old (car list)) list)
+	  (my-subst new old (cdr list))))))
