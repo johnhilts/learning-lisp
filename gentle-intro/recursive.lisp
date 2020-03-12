@@ -175,5 +175,14 @@ so that also means, according to this, that () is NOT a cons cell - true??
 	((equal (car list) old) (cons new (my-subst new old (cdr list))))
 	(t
 	 (cons
-	  (if (listp (car list)) (my-subst new old (car list)) list)
+	  (if (listp (car list)) (my-subst new old (car list)) (car list))
 	  (my-subst new old (cdr list))))))
+
+(defun my-flatten-nested (list)
+  "flatten list recursively"
+  (cond ((null list) nil)
+	((atom list) (list list))
+	(t
+	 (append
+	  (my-flatten-nested (car list))
+	  (my-flatten-nested (cdr list))))))
