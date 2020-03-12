@@ -127,3 +127,50 @@
 	      (cond ((null list1) (list nil))
 		    (t (my-recursive-intersection-for-tco (cdr list1) list2))))))
 
+(defun my-recursive-set-difference (list1 list2)
+  "implement set-difference with recursion"
+  (cond ((null list1) nil)
+	((not (member (car list1) list2)) (append (list (car list1)) (my-recursive-set-difference (cdr list1) list2)))
+	(t (my-recursive-set-difference (cdr list1) list2))))
+
+(defun my-count-odds-1 (list)
+  "count odds using a form of recursion"
+  (+
+   (cond ((null list) 0)
+	 ((oddp (car list)) (+ 1 (my-count-odds-1 (cdr list))))
+	 (t (my-count-odds-1 (cdr list))))))
+
+(defun my-count-atoms (list)
+  "count the atoms recursively"
+  (cond ((atom list) 1)
+	(t (+ (my-count-atoms (car list)) (my-count-atoms (cdr list))))))
+
+(defun count-cons (tree)
+  "according to this, anything that's not an atom is a cons cell(??)"
+  (cond ((atom tree) 0)
+	(t (+ 1
+	      (count-cons (car tree))
+	      (count-cons (cdr tree))))))
+
+(defun my-count-cons (tree)
+  "what about a !list?"
+  #||
+as long as we also check for an empty list
+because (listp nil) is true, because it's really (listp ()) ie "empty list"
+so that also means, according to this, that () is NOT a cons cell - true??
+||#
+  (cond ((or (null tree) (not (listp tree))) 0)
+	 (t (+ 1
+	     (my-count-cons (car tree))
+	     (my-count-cons (cdr tree))))))
+
+(defun my-sum-tree (tree)
+  "sum all the numbers that appear in a tree"
+  (cond ((atom tree) (if (numberp tree) tree 0))
+	(t (+ (my-sum-tree (car tree)) (my-sum-tree (cdr tree))))))
+
+(defun my-subst (new old list)
+  "recursive version of subst - do we need to handle nested??"
+  (cond ((null list) nil)
+	((equal (car list) old) (cons new (my-subst new old (cdr list))))
+	(t (cons (car list) (my-subst new old (cdr list))))))
