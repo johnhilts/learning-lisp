@@ -255,3 +255,18 @@ so that also means, according to this, that () is NOT a cons cell - true??
   (cond ((null list1) list2)
 	((member (car list1) list2) (my-union (cdr list1) list2))
 	(t (cons (car list1) (my-union (cdr list1) list2)))))
+
+(defun the-largest-even (list)
+  "assumes no negatives"
+  (cond ((null list) 0)
+	((oddp (car list)) (the-largest-even (cdr list)))
+	(t (max (car list) (the-largest-even (cdr list))))))
+
+(defun my-huge-exponentizer (n)
+  "given n, return n**n"
+  (my-huge-helper n n))
+
+(defun my-huge-helper (n i)
+  "helper for my-huge-exponentizer"
+  (cond ((zerop i) 1)
+	(t (* n (my-huge-helper n (- i 1))))))
