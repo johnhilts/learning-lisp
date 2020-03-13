@@ -280,3 +280,12 @@ so that also means, according to this, that () is NOT a cons cell - true??
 	  (my-every-other-item (cddr list))
 	  ))))
 
+(defun my-left-half (list)
+  "get the left half of a list"
+  (my-left-half-helper list (/ (length list) 2)))
+
+(defun my-left-half-helper (list n)
+  "helper for my-left-half"
+  (cond ((>= 0 n) nil)
+	(t (cons (car list) (my-left-half-helper (cdr list) (- n 1))))))
+
