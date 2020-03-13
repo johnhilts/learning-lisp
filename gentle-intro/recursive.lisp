@@ -270,3 +270,13 @@ so that also means, according to this, that () is NOT a cons cell - true??
   "helper for my-huge-exponentizer"
   (cond ((zerop i) 1)
 	(t (* n (my-huge-helper n (- i 1))))))
+
+(defun my-every-other-item (list)
+  "return a list that has every other itme from the original list"
+  (cond ((null list) nil)
+	(t
+	 (append
+	  (list (car list))
+	  (my-every-other-item (cddr list))
+	  ))))
+
