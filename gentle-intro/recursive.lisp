@@ -186,3 +186,43 @@ so that also means, according to this, that () is NOT a cons cell - true??
 	 (append
 	  (my-flatten-nested (car list))
 	  (my-flatten-nested (cdr list))))))
+
+(defun get-the-paren-depth (list)
+  "how deeply is a list nested?"
+  (+ 
+   (cond ((null list) 1)
+	 ((listp (car list)) (+ 1 (get-the-paren-depth (car list))))
+	 (t (get-the-paren-depth (cdr list))))))
+
+; count-up version using helper function
+(defun their-count-up (n)
+  (their-count-up-recursively 1 n))
+
+(defun their-count-up-recursively (cnt n)
+  (cond ((> cnt n) nil)
+	(t (cons cnt
+		 (their-count-up-recursively
+		  (+ cnt 1) n)))))
+
+(defun my-count-up (n)
+  "add elements to the end of the list instead of beginning - no need for helper"
+   (cond ((zerop n) nil)
+	 (t (append (my-count-up (- n 1)) (list n)))))
+
+(defun make-loaf (n)
+  "usage: (make-loaf 4) => '(x x x x)"
+  (if (zerop n) nil (append '(x) (make-loaf (- n 1)))))
+
+(defun bury-under-parentheses (x n)
+  "bury x under n number of parentheses"
+  (if (zerop n) x (list (bury-under-parentheses x (- n 1)))))
+
+(defun make-some-pairings (list1 list2)
+  "assume lists are the same size; '(1 2 3) '(a b c) => '((a 1)(b 2)(c 3))"
+   (cond ((null list1) nil)
+	 (t (append (list (list (car list1) (car list2))) (make-some-pairings (cdr list1) (cdr list2))))))
+
+(defun make-some-sublists (list)
+  "'(one two three) => '((one two three)(two three)(three))"
+  (cond ((null list) nil)
+	(t (append (list list) (make-some-sublists (cdr list))))))
