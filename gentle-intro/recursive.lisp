@@ -226,3 +226,25 @@ so that also means, according to this, that () is NOT a cons cell - true??
   "'(one two three) => '((one two three)(two three)(three))"
   (cond ((null list) nil)
 	(t (append (list list) (make-some-sublists (cdr list))))))
+
+(defun my-reverse (list)
+  "recursive reverse"
+  (my-reverse-helper list (length list)))
+
+(defun my-reverse-helper (list n)
+  "helper function"
+  (cond ((zerop n) nil)
+	(t
+	 (append
+	  (my-reverse-helper (cdr list) (- n 1))
+	  (list (car list))
+	  ))))
+
+(defun my-reverse-no-helper (list)
+  "no helper function"
+  (cond ((null list) nil)
+	(t
+	 (append
+	  (my-reverse-no-helper (cdr list))
+	  (list (car list))
+	  ))))
