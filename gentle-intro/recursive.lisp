@@ -241,7 +241,6 @@ so that also means, according to this, that () is NOT a cons cell - true??
        (my-reverse-helper list (- n 1))
        ))))
 
-
 (defun my-reverse-no-helper (list)
   "no helper function"
   (cond ((null list) nil)
@@ -250,3 +249,9 @@ so that also means, according to this, that () is NOT a cons cell - true??
 	  (my-reverse-no-helper (cdr list))
 	  (list (car list))
 	  ))))
+
+(defun my-union (list1 list2)
+  "recursive union"
+  (cond ((null list1) list2)
+	((member (car list1) list2) (my-union (cdr list1) list2))
+	(t (cons (car list1) (my-union (cdr list1) list2)))))
