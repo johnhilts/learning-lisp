@@ -233,12 +233,14 @@ so that also means, according to this, that () is NOT a cons cell - true??
 
 (defun my-reverse-helper (list n)
   "helper function"
-  (cond ((zerop n) nil)
-	(t
-	 (append
-	  (my-reverse-helper (cdr list) (- n 1))
-	  (list (car list))
-	  ))))
+   (cond
+     ((zerop n) nil)
+     (t
+      (append
+       (list (nth (- n 1) list))
+       (my-reverse-helper list (- n 1))
+       ))))
+
 
 (defun my-reverse-no-helper (list)
   "no helper function"
