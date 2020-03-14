@@ -289,3 +289,9 @@ so that also means, according to this, that () is NOT a cons cell - true??
   (cond ((>= 0 n) nil)
 	(t (cons (car list) (my-left-half-helper (cdr list) (- n 1))))))
 
+(defun my-merge-the-lists (list1 list2)
+  "merge 2 sorted lists and maintain the order"
+  (cond ((null list1) list2)
+	((null list2) list1)
+	((<= (car list1) (car list2)) (cons (car list1) (my-merge-the-lists (cdr list1) list2)))
+	(t (cons (car list2) (my-merge-the-lists list1 (cdr list2))))))
