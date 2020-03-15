@@ -382,3 +382,11 @@ format: name father mother
 (defun cousins (person)
   "get a person's cousins"
   (mapunion #'children (mapunion #'siblings (parents person))))
+
+(defun is-descended-from (descendent ancestor)
+  "is descendent descended from ancestor?"
+  (cond ((null descendent) nil)
+	((member ancestor (parents descendent)) t)
+	((or
+	  (is-descended-from (father descendent) ancestor)
+	  (is-descended-from (mother descendent) ancestor)) t)))
