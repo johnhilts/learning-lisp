@@ -334,13 +334,11 @@ format: name father mother
 
 (defun father (person)
   "get person's faaahthah (luuuke)"
-  (remove-if #'(lambda (e) (null e))
-	     (cadr (assoc person **the-family-tree**))))
+  (cadr (assoc person **the-family-tree**)))
 
 (defun mother (person)
   "get person's mother"
-  (remove-if #'(lambda (e) (null e))
-	     (caddr (assoc person **the-family-tree**))))
+  (caddr (assoc person **the-family-tree**)))
 
 (defun parents (person)
   "get person's parents"
