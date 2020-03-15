@@ -390,3 +390,22 @@ format: name father mother
 	((or
 	  (is-descended-from (father descendent) ancestor)
 	  (is-descended-from (mother descendent) ancestor)) t)))
+
+(defun ancestors (x)
+  (cond ((null x) nil)
+	(t (union
+	    (parents x)
+	    (union (ancestors (father x))
+		   (ancestors (mother x)))))))
+
+(defun generation-gap (descendent ancestor)
+  "how many generations are the 2 separated?"
+  (cond ((equal descendent ancestor) 0)
+	(t (reduce #'+
+		   (mapcar #'(lambda (e)
+			       (if (is-descended-from e ancestor)
+				   (+ 1 (generation-gap e ancestor))
+				   (if (equal e ancestor)
+				       1
+				       0)))
+			   (parents descendent))))))
