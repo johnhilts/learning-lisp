@@ -354,7 +354,7 @@ format: name father mother
       (mapcar
        #'(lambda (e)
 	   (car e))
-       (my-union
+       (union
 	(remove-if-not
 	 #'(lambda (e)
 	     (equal person (cadr e)))
@@ -363,3 +363,14 @@ format: name father mother
 	 #'(lambda (e)
 	     (equal person (caddr e)))
 	 **the-family-tree**)))))
+
+(defun siblings (person)
+  "get siblings - I think this has to be solved with recursion ..."
+  (remove-if
+   #'(lambda (e)
+       (equal person e))
+   (union
+    (car (mapcar #'children (parents person)))
+    (cadr (mapcar #'children (parents person))))))
+  
+  
