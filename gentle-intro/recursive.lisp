@@ -295,3 +295,71 @@ so that also means, according to this, that () is NOT a cons cell - true??
 	((null list2) list1)
 	((<= (car list1) (car list2)) (cons (car list1) (my-merge-the-lists (cdr list1) list2)))
 	(t (cons (car list2) (my-merge-the-lists list1 (cdr list2))))))
+
+#||
+format: name father mother
+||#
+(defvar **the-family-tree**
+      '((colin nil nil)
+	(deirdre nil nil)
+	(arthur nil nil)
+	(kate nil nil)
+	(frank nil nil)
+	(linda nil nil)
+	(suzanne colin deirdre)
+	(bruce arthur kate)
+	(charles arthur kate)
+	(david arthur kate)
+	(ellen arthur kate)
+	(george frank linda)
+	(hillary frank linda)
+	(andre nil nil)
+	(tamara bruce suzanne)
+	(vincent bruce suzanne)
+	(wanda nil nil)
+	(ivan george ellen)
+	(julie george ellen)
+	(marie george ellen)
+	(nigel andre hillary)
+	(frederick nil tamara)
+	(zelda vincent wanda)
+	(joshua ivan wanda)
+	(quentin nil nil)
+	(robert quentin julie)
+	(olivia nigel marie)
+	(peter nigel marie)
+	(erica nil nil)
+	(yvette robert zelda)
+	(diane peter erica)))
+
+(defun father (person)
+  "get person's faaahthah (luuuke)"
+  (remove-if #'(lambda (e) (null e))
+	     (cadr (assoc person **the-family-tree**))))
+
+(defun mother (person)
+  "get person's mother"
+  (remove-if #'(lambda (e) (null e))
+	     (caddr (assoc person **the-family-tree**))))
+
+(defun parents (person)
+  "get person's parents"
+  (remove-if #'(lambda (e) (null e))
+	     (cdr (assoc person **the-family-tree**))))
+
+(defun children (person)
+  "get person's children"
+  (if (null person)
+      nil
+      (mapcar
+       #'(lambda (e)
+	   (car e))
+       (my-union
+	(remove-if-not
+	 #'(lambda (e)
+	     (equal person (cadr e)))
+	 **the-family-tree**)
+	(remove-if-not
+	 #'(lambda (e)
+	     (equal person (caddr e)))
+	 **the-family-tree**)))))
