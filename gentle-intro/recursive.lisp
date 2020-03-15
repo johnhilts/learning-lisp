@@ -368,7 +368,13 @@ format: name father mother
    #'(lambda (e)
        (equal person e))
    (union
-    (car (mapcar #'children (parents person)))
-    (cadr (mapcar #'children (parents person))))))
+    (children (father person))
+    (children (mother person)))))
   
-  
+(defun mapunion (function list)
+  "(+ mapcar union) probably"
+  (reduce #'union (mapcar function list)))
+
+(defun grandparents (person)
+  "get a person's grandparents"
+  (mapunion #'parents (parents person)))
