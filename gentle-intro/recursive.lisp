@@ -378,3 +378,7 @@ format: name father mother
 (defun grandparents (person)
   "get a person's grandparents"
   (mapunion #'parents (parents person)))
+
+(defun cousins (person)
+  "get a person's cousins"
+  (mapunion #'children (mapunion #'siblings (parents person))))
