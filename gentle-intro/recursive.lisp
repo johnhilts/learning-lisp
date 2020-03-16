@@ -400,7 +400,8 @@ format: name father mother
 
 (defun generation-gap (descendent ancestor)
   "how many generations are the 2 separated?"
-  (cond ((equal descendent ancestor) 0)
+  (cond ((not (is-descended-from descendent ancestor)) nil)
+	((equal descendent ancestor) 0)
 	(t (reduce #'+
 		   (mapcar #'(lambda (e)
 			       (if (is-descended-from e ancestor)
@@ -409,3 +410,19 @@ format: name father mother
 				       1
 				       0)))
 			   (parents descendent))))))
+
+#||
+in the answer from the book, look how it leverages or with nill and a number
+compare to this expression that works the same way:
+(or () 1) => 1
+very elegant!
+||#
+(defun generation-gap-answer-from-book (x y)
+  (g-gap-helper x y 0))
+(defun g-gap-helper (x y n)
+  (cond ((null x) nil)
+	((equal x y) n)
+	(t (or (g-gap-helper
+		(father x) y (1+ n))
+	       (g-gap-helper
+		(mother x) y (1+ n))))))
