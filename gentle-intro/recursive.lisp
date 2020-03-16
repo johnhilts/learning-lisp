@@ -429,7 +429,7 @@ very elegant!
 
 (defun my-count-up-tco (n)
   "count up with proper TCO"
-  (my-count-up-tco-helper n (list n)))
+  (my-count-up-tco-helper n ()))
 
 (defun my-count-up-tco-helper (n list)
   "count up tco helper"
