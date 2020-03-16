@@ -426,3 +426,13 @@ very elegant!
 		(father x) y (1+ n))
 	       (g-gap-helper
 		(mother x) y (1+ n))))))
+
+(defun my-count-up-tco (n)
+  "count up with proper TCO"
+  (my-count-up-tco-helper n (list n)))
+
+(defun my-count-up-tco-helper (n list)
+  "count up tco helper"
+  (cond ((zerop n) list)
+	(t (my-count-up-tco-helper (- n 1) (cons n list)))))
+  
