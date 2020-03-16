@@ -436,3 +436,8 @@ very elegant!
   (cond ((zerop n) list)
 	(t (my-count-up-tco-helper (- n 1) (cons n list)))))
   
+(defun my-union-tco (list1 list2)
+  "recursive union using tco"
+  (cond ((null list1) list2)
+	(t (my-union-tco (cdr list1)
+	    (if (member (car list1) list2) list2 (cons (car list1) list2))))))
