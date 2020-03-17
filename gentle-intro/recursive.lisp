@@ -456,3 +456,17 @@ very elegant!
 	 (if (member (car list1) list2)
 	     (cons (car list1) result)
 	     result) (- n 1)))))
+
+(defun my-set-difference-tco (list1 list2)
+  "set-difference with proper TCO"
+  (my-set-difference-tco-helper list1 list2 () (length list1)))
+
+(defun my-set-difference-tco-helper (list1  list2 result n)
+  "set-difference tco helper"
+  (cond ((zerop n) result)
+	(t (my-set-difference-tco-helper
+	 (cdr list1)
+	 list2
+	 (if (not (member (car list1) list2))
+	     (cons (car list1) result)
+	     result) (- n 1)))))
