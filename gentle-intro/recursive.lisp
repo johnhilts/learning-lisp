@@ -121,6 +121,7 @@
 
 (defun my-recursive-intersection-for-tco (list1 list2)
   "trying an ML style version more suited for TCO"
+  ; update - this wouldn't count as TCO because of the append
   (remove-if #'null
 	     (append
 	      (if (member (car list1) list2) (list (car list1)) (list nil))
@@ -441,3 +442,17 @@ very elegant!
   (cond ((null list1) list2)
 	(t (my-union-tco (cdr list1)
 	    (if (member (car list1) list2) list2 (cons (car list1) list2))))))
+
+(defun my-intersection-tco (list1 list2)
+  "intersection with proper TCO"
+  (my-intersection-tco-helper list1 list2 () (length list1)))
+
+(defun my-intersection-tco-helper (list1  list2 result n)
+  "intersection tco helper"
+  (cond ((zerop n) result)
+	(t (my-intersection-tco-helper
+	 (cdr list1)
+	 list2
+	 (if (member (car list1) list2)
+	     (cons (car list1) result)
+	     result) (- n 1)))))
