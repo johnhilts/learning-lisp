@@ -486,6 +486,21 @@ very elegant!
 	(t
 	 (my-tree-find-if fn (cdr list)))))
 
-	 
+; example from book
+(defun count-up (n)
+  (labels ((count-up-recursively (cnt) ; inner function name is count-up-recursively
+	     (if (> cnt n) nil
+		 (cons cnt
+		       (count-up-recursively
+			(+ cnt 1)))))) ; "body of inner function ends here
+    (count-up-recursively 1))) ; ... but,there's a call made to the inner function that's still inside the labels block. Examples on clhs are the same format.
 	
-	
+#||
+here's an example from stack overflow; it defines 2 nested functions.
+This gives me a clearer idea of how labels works...
+||#
+(defun thing (x)
+  (labels ((helper (y) (loop for i from x to y collect i))
+	   (double-it (num) (* 2 num)))
+    (helper (double-it 10))))
+
