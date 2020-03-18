@@ -504,3 +504,16 @@ This gives me a clearer idea of how labels works...
 	   (double-it (num) (* 2 num)))
     (helper (double-it 10))))
 
+#||
+An arithmetic expression is either a number, or a three-element list
+whose first and third elements are arithmetic expressions and whose
+middle element is one of +, -, *, or /.
+||#
+(defun my-arith-eval (equation)
+  "parse normal equation and evaluate it"
+  (cond
+    ((equal (cadr equation) '*) (* (car equation) (caddr equation)))
+    ((equal (cadr equation) '/) (/ (car equation) (caddr equation)))
+    ((equal (cadr equation) '+) (+ (car equation) (caddr equation)))
+    ((equal (cadr equation) '-) (- (car equation) (caddr equation)))))
+    
