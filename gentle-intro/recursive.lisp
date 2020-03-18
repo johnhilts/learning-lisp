@@ -470,3 +470,22 @@ very elegant!
 	 (if (not (member (car list1) list2))
 	     (cons (car list1) result)
 	     result) (- n 1)))))
+
+(defun my-tree-find-if (fn list)
+  "apply fn to list and return first non nil atom"
+  ; not using tco
+  (cond ((null list) nil)
+	((and
+	  (atom (car list))
+	  (funcall fn (car list)))
+	 (car list))
+	((and
+	  (listp (car list))
+	  (my-tree-find-if fn (car list)))
+	 (my-tree-find-if fn (car list)))
+	(t
+	 (my-tree-find-if fn (cdr list)))))
+
+	 
+	
+	
