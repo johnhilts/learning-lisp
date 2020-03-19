@@ -523,9 +523,6 @@ middle element is one of +, -, *, or /.
 		 (my-arith-eval-core op?))))
     (let ((op1 (my-get-operand (car equation)))
 	  (op2 (my-get-operand (caddr equation))))
-      (cond
-	((equal (cadr equation) '*) (* op1 op2))
-	((equal (cadr equation) '/) (/ op1 op2))
-	((equal (cadr equation) '+) (+ op1 op2))
-	((equal (cadr equation) '-) (- op1 op2))))))
+      (funcall (cadr equation) op1 op2))))
+      
     
