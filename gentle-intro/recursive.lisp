@@ -517,12 +517,13 @@ middle element is one of +, -, *, or /.
 ||#
 (defun my-arith-eval-core (equation)
   "parse normal equation and evaluate it"
-  (labels ((my-get-operand (op?)
-	     (if (atom op?)
-		 op?
-		 (my-arith-eval-core op?))))
-    (let ((op1 (my-get-operand (car equation)))
-	  (op2 (my-get-operand (caddr equation))))
-      (funcall (cadr equation) op1 op2))))
+  (labels ((my-get-number (possible-number)
+	     (if (atom possible-number)
+		 possible-number
+		 (my-arith-eval-core possible-number))))
+    (let ((num1 (my-get-number (car equation)))
+	  (op (cadr equation))
+	  (num2 (my-get-number (caddr equation))))
+      (funcall op num1 num2))))
       
     
