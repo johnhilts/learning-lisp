@@ -504,6 +504,12 @@ This gives me a clearer idea of how labels works...
 	   (double-it (num) (* 2 num)))
     (helper (double-it 10))))
 
+(defun my-thing (x)
+  (labels ((helper (y) (loop for i from x to y collect i))
+	   (double-it (num) (* 2 num)))
+    (let ((my-value (helper (double-it 10))))
+      (print my-value))))
+
 #||
 An arithmetic expression is either a number, or a three-element list
 whose first and third elements are arithmetic expressions and whose
@@ -511,17 +517,15 @@ middle element is one of +, -, *, or /.
 ||#
 (defun my-arith-eval-core (equation)
   "parse normal equation and evaluate it"
-  (let ((op1
-	 (if (atom (car equation))
-	     (car equation)
-	     (my-arith-eval-core (car equation))))
-	(op2
-	 (if (atom (caddr equation))
-	     (caddr equation)
-	     (my-arith-eval-core (caddr equation)))))
-    (cond
-      ((equal (cadr equation) '*) (* op1 op2))
-      ((equal (cadr equation) '/) (/ op1 op2))
-      ((equal (cadr equation) '+) (+ op1 op2))
-      ((equal (cadr equation) '-) (- op1 op2)))))
+  (labels ((my-get-operand (op?)
+	     (if (atom op?)
+		 op?
+		 (my-arith-eval-core op?))))
+    (let ((op1 (my-get-operand (car equation)))
+	  (op2 (my-get-operand (caddr equation))))
+      (cond
+	((equal (cadr equation) '*) (* op1 op2))
+	((equal (cadr equation) '/) (/ op1 op2))
+	((equal (cadr equation) '+) (+ op1 op2))
+	((equal (cadr equation) '-) (- op1 op2))))))
     
