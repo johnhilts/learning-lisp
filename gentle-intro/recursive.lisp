@@ -509,11 +509,19 @@ An arithmetic expression is either a number, or a three-element list
 whose first and third elements are arithmetic expressions and whose
 middle element is one of +, -, *, or /.
 ||#
-(defun my-arith-eval (equation)
+(defun my-arith-eval-core (equation)
   "parse normal equation and evaluate it"
-  (cond
-    ((equal (cadr equation) '*) (* (car equation) (caddr equation)))
-    ((equal (cadr equation) '/) (/ (car equation) (caddr equation)))
-    ((equal (cadr equation) '+) (+ (car equation) (caddr equation)))
-    ((equal (cadr equation) '-) (- (car equation) (caddr equation)))))
+  (let ((op1
+	 (if (atom (car equation))
+	     (car equation)
+	     (my-arith-eval-core (car equation))))
+	(op2
+	 (if (atom (caddr equation))
+	     (caddr equation)
+	     (my-arith-eval-core (caddr equation)))))
+    (cond
+      ((equal (cadr equation) '*) (* op1 op2))
+      ((equal (cadr equation) '/) (/ op1 op2))
+      ((equal (cadr equation) '+) (+ op1 op2))
+      ((equal (cadr equation) '-) (- op1 op2)))))
     
