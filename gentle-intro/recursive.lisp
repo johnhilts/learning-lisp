@@ -538,16 +538,14 @@ middle element is one of +, -, *, or /.
   (cond
     ((null equation) nil)
     ((numberp equation) t)
-    ((or
-      (equal '* equation)
-      (equal '/ equation)
-      (equal '+ equation)
-      (equal '- equation))
-     t)
     ((and
       (listp equation)
       (legal-equation? (car equation))
-      (legal-equation? (cadr equation))
+      (or
+	(equal '* (cadr equation))
+	(equal '/ (cadr equation))
+	(equal '+ (cadr equation))
+	(equal '- (cadr equation)))
       (legal-equation? (caddr equation))) t)
     (t nil)))
      
