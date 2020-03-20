@@ -544,3 +544,25 @@ middle element is one of +, -, *, or /.
       (member (cadr equation) '(* / + -))
       (legal-equation? (caddr equation))) t)
     (t nil)))
+
+;from the book
+(defun factors (n)
+  (factors-help n 2))
+(defun factors-help (n p)
+  (cond ((equal n 1) nil)
+	((zerop (rem n p))
+	 (cons p (factors-help (/ n p) p)))
+	(t (factors-help n (+ p 1)))))
+
+(defun factor-tree (n)
+  "similar to the factors function, but output the tree"
+  (factor-tree-helper n 2))
+
+(defun factor-tree-helper (n p)
+  "helper for factor-tree - why not use labels??"
+  (cond ((equal n 1) nil)
+	((equal n p) n)
+	((zerop (rem n p))
+	 (list n p (factor-tree-helper (/ n p) p)))
+	(t (factor-tree-helper n (+ p 1)))))
+	 
