@@ -537,18 +537,19 @@ middle element is one of +, -, *, or /.
   "is this a legal equation?"
   (cond
     ((null equation) nil)
+    ((numberp equation) t)
+    ((or
+      (equal '* equation)
+      (equal '/ equation)
+      (equal '+ equation)
+      (equal '- equation))
+     t)
     ((and
-      (or
-       (equal '* (cadr equation))
-       (equal '/ (cadr equation))
-       (equal '+ (cadr equation))
-       (equal '- (cadr equation)))
-      (or
-       (numberp (car equation))
-       (legal-equation? (car equation)))
-      (or
-       (numberp (caddr equation))
-       (and (listp (caddr equation))
-	    (legal-equation? (caddr equation))))) t)
+      (listp equation)
+      (legal-equation? (car equation))
+      (legal-equation? (cadr equation))
+      (legal-equation? (caddr equation))) t)
     (t nil)))
+     
+     
     
