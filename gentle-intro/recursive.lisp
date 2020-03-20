@@ -525,5 +525,30 @@ middle element is one of +, -, *, or /.
 	  (op (cadr equation))
 	  (num2 (my-get-number (caddr equation))))
       (funcall op num1 num2))))
-      
+
+; book solution ... much more elegant!      
+(defun book-arith-eval (exp)
+  (cond ((numberp exp) exp)
+	(t (funcall (second exp)
+		    (arith-eval (first exp))
+		    (arith-eval (third exp))))))
+
+(defun legal-equation? (equation)
+  "is this a legal equation?"
+  (cond
+    ((null equation) nil)
+    ((and
+      (or
+       (equal '* (cadr equation))
+       (equal '/ (cadr equation))
+       (equal '+ (cadr equation))
+       (equal '- (cadr equation)))
+      (or
+       (numberp (car equation))
+       (legal-equation? (car equation)))
+      (or
+       (numberp (caddr equation))
+       (and (listp (caddr equation))
+	    (legal-equation? (caddr equation))))) t)
+    (t nil)))
     
