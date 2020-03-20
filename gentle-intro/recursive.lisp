@@ -535,19 +535,12 @@ middle element is one of +, -, *, or /.
 
 (defun legal-equation? (equation)
   "is this a legal equation?"
-  (labels ((is-op? (possible-op)
-	     (or
-	      (equal '* possible-op)
-	      (equal '/ possible-op)
-	      (equal '+ possible-op)
-	      (equal '- possible-op))))
-    (cond
-      ((null equation) nil)
-      ((numberp equation) t)
-      ((and
-	(listp equation)
-	(legal-equation? (car equation))
-	(is-op? (cadr equation))
-	(legal-equation? (caddr equation))) t)
-      (t nil))))
- 
+  (cond
+    ((null equation) nil)
+    ((numberp equation) t)
+    ((and
+      (listp equation)
+      (legal-equation? (car equation))
+      (member (cadr equation) '(* / + -))
+      (legal-equation? (caddr equation))) t)
+    (t nil)))
