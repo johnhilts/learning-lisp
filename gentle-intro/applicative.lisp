@@ -244,7 +244,7 @@
 
 (defun fetch (pattern)
   "return all entries from the database that match the pattern"
-  (remove-if-not #'(lambda (e) (match-triple? e pattern)) **block-database**))
+  (remove-ibf-not #'(lambda (e) (match-triple? e pattern)) **block-database**))
 
 (defun get-color-pattern-for-block (block)
   "get color pattern for a block"
