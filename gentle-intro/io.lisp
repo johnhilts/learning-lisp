@@ -49,3 +49,11 @@
 		nil)
 	    (print-board-helper (cdr list) 1)))))
     (print-board-helper list 1)))
+
+(defun get-gross-pay ()
+  "get hours and pay rate from user input"
+  (format t "Enter hourly salary: ")
+  (let ((salary (read)))
+    (format t "Enter hours worked: ")
+    (let ((hours (read)))
+      (format t "Gross pay: ~s" (* salary hours)))))
