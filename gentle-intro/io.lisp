@@ -57,3 +57,13 @@
     (format t "Enter hours worked: ")
     (let ((hours (read)))
       (format t "Gross pay: ~s" (* salary hours)))))
+
+(defun cookie-monster ()
+  "cookie monster function"
+  (format t "Give me cookie!!~%")
+  (format t "Cookie?~%")
+  (let ((input (read)))
+    (cond ((equal 'cookie input) ; note that input is a symbol, not a string!
+	   (format t "Thank you! ... Munch munch munch ... BURP"))
+	  (t (format t "No want ~s~%" input)
+	     (cookie-monster)))))
