@@ -67,3 +67,15 @@
 	   (format t "Thank you! ... Munch munch munch ... BURP"))
 	  (t (format t "No want ~s~%" input)
 	     (cookie-monster)))))
+
+(defun space-over (n)
+  "move cursor to the right n times"
+  (cond ((< n 0) (format t "Error!"))
+	((zerop n) t)
+	(t (format t " ")
+	   (space-over (- n 1)))))
+
+(defun test-space-over (n)
+  (format t "~%>>>")
+  (space-over n)
+  (format t "<<<"))
