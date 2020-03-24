@@ -79,3 +79,25 @@
   (format t "~%>>>")
   (space-over n)
   (format t "<<<"))
+
+(defun plot-one-point (plotting-string y-val)
+  "print plotting-string's contents at position y-val (0 based)"
+  (space-over (- y-val 1))
+  (format t "~a~%" plotting-string))
+
+(defun plot-points (plotting-string y-values)
+  "plots string at points in y-values"
+  (cond ((null y-values) nil)
+	(t (plot-one-point plotting-string (car y-values))
+	   (plot-points plotting-string (cdr y-values)))))
+
+(defun generate (m n)
+  "generate the collection of integers from m to n"
+  (labels
+      (
+       (generate-helper (m n i)
+	 (cond ((equal n i) (cons n nil))
+	       ((equal m i) (cons m (generate-helper m n (+ 1 i))))
+	       (t (cons i (generate-helper m n (+ 1 i)))))))
+    (generate-helper m n m)))
+	      
