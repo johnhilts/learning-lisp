@@ -82,7 +82,7 @@
 
 (defun plot-one-point (plotting-string y-val)
   "print plotting-string's contents at position y-val (0 based)"
-  (space-over (- y-val 1))
+  (space-over y-val)
   (format t "~a~%" plotting-string))
 
 (defun plot-points (plotting-string y-values)
@@ -101,3 +101,10 @@
 	       (t (cons i (generate-helper m n (+ 1 i)))))))
     (generate-helper m n m)))
 	      
+(defun make-graph (func start end plotting-string)
+  "makes a graph"
+  (plot-points plotting-string (mapcar func (generate start end))))
+
+(defun square (n)
+  "square a number"
+  (* n n))
