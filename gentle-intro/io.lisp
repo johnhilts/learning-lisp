@@ -105,6 +105,19 @@
   "makes a graph"
   (plot-points plotting-string (mapcar func (generate start end))))
 
+(defun make-graph-input ()
+  "get values for make-graph from user input"
+  (format t "Input function name: ")
+  (let ((function (read)))
+    (format t "Input start: ")
+    (let ((start (read)))
+      (format t "Input end: ")
+      (let ((end (read)))
+	(format t "Input plotting string: ")
+	(let ((plotting-string (read)))
+	  (make-graph function start end plotting-string))))))
+  
+
 (defun square (n)
   "square a number"
   (* n n))
