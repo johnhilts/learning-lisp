@@ -121,3 +121,14 @@
 (defun square (n)
   "square a number"
   (* n n))
+
+(defun dot-prin1 (list)
+  "print list in cons format"
+  (cond ((null list) (format t "nil")) ; maybe we can fold this into the next line?
+	((atom list) (format t "~s" list))
+	((listp list)
+	 (format t "(")
+	 (dot-prin1 (car list))
+	 (format t " . ")
+	 (dot-prin1 (cdr list))
+	 (format t ")"))))
