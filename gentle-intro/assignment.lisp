@@ -96,8 +96,10 @@
   (list (pick-random-empty-position board)
 	"random move"))
 
-(defun choose-best-move (board) ;First version.
-  (random-move-strategy board))
+(defun choose-best-move (board) ;Second version.
+  (or (make-three-in-a-row board)
+      (block-opponent-win board)
+      (random-move-strategy board)))
 
 (defun computer-move (board)
   (let* ((best-move (choose-best-move board))
@@ -131,3 +133,28 @@
   (if (y-or-n-p "Would you like to go first? ")
       (opponent-move (make-board))
       (computer-move (make-board))))
+
+
+(defun find-empty-position (board squares)
+  (find-if #'(lambda (pos)
+	       (zerop (nth pos board)))
+	   squares))
+
+(defun win-or-block (board target-sum)
+  (let ((triplet (find-if
+		  #'(lambda (trip)
+		      (equal (sum-triplet board trip)
+			     target-sum))
+		  *triplets*)))
+    (when triplet
+      (find-empty-position board triplet))))
+
+(defun make-three-in-a-row (board)
+  (let ((pos (win-or-block board
+			   (* 2 *computer*))))
+    (and pos (list pos "make three in a row"))))
+
+(defun block-opponent-win (board)
+  (let ((pos (win-or-block board
+			   (* 2 *opponent*))))
+    (and pos (list pos "block opponent"))))
