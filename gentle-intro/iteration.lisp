@@ -30,3 +30,10 @@
   (let ((length 0))
     (dolist (x list length)
       (incf length))))
+
+(defun it-nth (i list)
+  (let ((counter 0))
+    (dolist (x list)
+      (if (equal i counter)
+	  (return x)
+	  (incf counter)))))
