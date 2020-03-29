@@ -42,3 +42,8 @@
   (let ((result list2))
     (dolist (x list1 result)
       (push x result))))
+
+(defun it-reverse (list)
+  (let ((result nil))
+    (dolist (x list result)
+      (push x result))))
