@@ -37,3 +37,8 @@
       (if (equal i counter)
 	  (return x)
 	  (incf counter)))))
+
+(defun it-union (list1 list2)
+  (let ((result list2))
+    (dolist (x list1 result)
+      (push x result))))
