@@ -186,3 +186,7 @@
     (format t "~&I predict you will be: ~S"
 	    result)
     result))
+
+(defun nchop (list) ; won't work with constants; need to pass an assigned variable
+  "reduce any non nil list to 1 element"
+  (setf (cdr list) nil))
