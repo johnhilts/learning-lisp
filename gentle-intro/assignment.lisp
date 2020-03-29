@@ -190,3 +190,7 @@
 (defun nchop (list) ; won't work with constants; need to pass an assigned variable
   "reduce any non nil list to 1 element"
   (setf (cdr list) nil))
+
+(defun ntack (list item-to-append)
+  "destructively append and item to a list"
+  (nconc list (list item-to-append)))
