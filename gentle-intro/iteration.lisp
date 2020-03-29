@@ -25,3 +25,8 @@
 	(oddp (car list-of-numbers))
 	(check-all-odd-recursive (cdr list-of-numbers))))))
   
+(defun it-length (list)
+  "iterative version of length"
+  (let ((length 0))
+    (dolist (x list length)
+      (incf length))))
