@@ -182,6 +182,7 @@
 	 (result
 	  (cond ((> commission 100) 'rich)
 		((< commission 100) 'poor))))
+    (break "Value of RESULT is ~S" result)
     (format t "~&I predict you will be: ~S"
 	    result)
     result))
