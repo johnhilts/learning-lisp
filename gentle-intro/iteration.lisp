@@ -65,3 +65,25 @@
   (dotimes (i n)
     (format t "~s..." (- n i)))
   (format t "Blast off!"))
+
+(defun find-largest (list-of-numbers)
+  (let ((largest (first list-of-numbers)))
+    (dolist (element (rest list-of-numbers)
+	     largest)
+      (when (> element largest)
+	(setf largest element)))))
+
+(defun find-largest* (list-of-numbers)
+  (do* ((x list-of-numbers (cdr x))
+	(largest (car list-of-numbers))) ; list of variables
+	((null x) largest) ; ending condition
+	(when (> (car x) largest) ; actual body
+	  (setf largest (car x)))))
+
+(defun book-version-find-largest (list-of-numbers)
+  (do* ((largest (first list-of-numbers))
+	(z (rest list-of-numbers) (rest z))
+	(element (first z) (first z)))
+       ((null z) largest)
+    (when (> element largest)
+      (setf largest element))))
