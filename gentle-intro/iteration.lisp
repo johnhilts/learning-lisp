@@ -5,3 +5,8 @@
   (dolist (x list)
     (if (equal x item)
 	(return t))))
+
+(defun it-assoc (key dictionary)
+  (dolist (entry dictionary)
+    (if (equal key (car entry))
+	(return entry))))
