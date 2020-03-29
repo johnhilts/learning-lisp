@@ -47,3 +47,11 @@
   (let ((result nil))
     (dolist (x list result)
       (push x result))))
+
+(defun it-check-all-odd (list)
+  (do ((cnt 0 (+ 1 cnt)))
+      ((equal cnt (length list))
+       t)
+    (format t "checking ~d~%" (nth cnt list))
+    (if (not (oddp (nth cnt list)))
+	(return nil))))
