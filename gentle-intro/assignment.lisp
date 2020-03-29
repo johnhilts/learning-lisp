@@ -158,3 +158,21 @@
   (let ((pos (win-or-block board
 			   (* 2 *opponent*))))
     (and pos (list pos "block opponent"))))
+
+(defun ugly (x y)
+  (when (> x y)
+    (setf temp y)
+    (setf y x)
+    (setf x temp))
+  (setf avg (/ (+ x y) 2.0))
+  (setf pct (* 100 (/ avg y)))
+  (list 'average avg 'is
+	pct 'percent 'of 'max y))
+
+(defun not-ugly (x y)
+  (let ((max-x (min x y))
+	(max-y (max x y)))
+    (let* ((avg (/ (+ max-x max-y) 2.0))
+	   (pct (* 100 (/ avg max-y))))
+      (list 'average avg 'is
+	    pct 'percent 'of 'max max-y))))
