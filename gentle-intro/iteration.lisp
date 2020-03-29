@@ -55,3 +55,13 @@
     (format t "checking ~d~%" (nth cnt list))
     (if (not (oddp (nth cnt list)))
 	(return nil))))
+
+(defun launch (n)
+  (do ((cnt n (- cnt 1)))
+      ((zerop cnt) (format t "Blast off!"))
+    (format t "~S..." cnt)))
+
+(defun it-launch (n)
+  (dotimes (i n)
+    (format t "~s..." (- n i)))
+  (format t "Blast off!"))
