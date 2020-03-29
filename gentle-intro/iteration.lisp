@@ -94,7 +94,7 @@
       (incf result result))))
 
 (defun power-of-2-with-do (n)
-  (do ((i 1 (+ i 1))
-       (result 2))
-      ((equal i n) result)
+  (do ((i 1 (+ i 1)) ; counter
+       (result 2)) ; local variable
+      ((equal i n) result) ; end condition + consequence (which also gets returned)
     (incf result result)))
