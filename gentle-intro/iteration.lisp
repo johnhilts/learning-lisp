@@ -87,3 +87,14 @@
        ((null z) largest)
     (when (> element largest)
       (setf largest element))))
+
+(defun power-of-2 (n) ;2 to the Nth power.
+  (let ((result 1))
+    (dotimes (i n result)
+      (incf result result))))
+
+(defun power-of-2-with-do (n)
+  (do ((i 1 (+ i 1))
+       (result 2))
+      ((equal i n) result)
+    (incf result result)))
