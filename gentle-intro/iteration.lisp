@@ -98,3 +98,16 @@
        (result 2)) ; local variable
       ((equal i n) result) ; end condition + consequence (which also gets returned)
     (incf result result)))
+
+(defun first-non-integer (x)
+  "Return the first non-integer element of X."
+  (do* ((z x (rest z))
+	(z1 (first z) (first z)))
+       ((null z) 'none)
+    (unless (integerp z1)
+      (return z1))))
+
+(defun first-non-integer-dolist (list)
+  (dolist (x list 'none)
+    (unless (integerp x)
+      (return x))))
