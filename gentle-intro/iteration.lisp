@@ -111,3 +111,20 @@
   (dolist (x list 'none)
     (unless (integerp x)
       (return x))))
+
+(defun read-a-number ()
+  (do ((answer nil))
+      (nil) ; termination test nil - endless loop
+    (format t "~&Please type a number: ")
+    (setf answer (read))
+    (if (numberp answer)
+	(return answer))
+    (format t "~&Sorry, ~S is not a number. Try again." answer)))
+
+(dotimes (i 5 i) ; returns 5
+  (format t "~&I = ~S" i))
+
+(defun tricky-dotimes-as-do ()
+  (do ((i 0 (incf i)))
+      ((equal i 5) i)
+      (format t "~&I = ~s" i)))
