@@ -195,3 +195,10 @@
       ((null prefix?) is-prefix)
     (unless (equal (car prefix?) (car dna))
       (setf is-prefix nil))))
+
+(defun appearsp (search-dna dna-strand)
+  "does dna-strand contain search-dna?"
+  (do ((dna dna-strand (cdr dna)))
+      ((null dna) nil)
+    (if (prefixp search-dna dna)
+	(return t))))
