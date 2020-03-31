@@ -128,3 +128,23 @@
   (do ((i 0 (incf i)))
       ((equal i 5) i)
       (format t "~&I = ~s" i)))
+
+(defun complement-base (base)
+  "return complement of given base"
+  (cond
+    ((equal 'a base)
+     't)
+    ((equal 'g base)
+     'c)
+    ((equal 't base)
+     'a)
+    ((equal 'c base)
+     'g)
+    (t nil)))
+
+(defun complement-strand (dna-strand)
+  "return complementary strand of a sequence of single-stranded DNA"
+  (let ((strand nil))
+    (dolist (dna-base dna-strand (nreverse strand))
+      (push (complement-base dna-base) strand))))
+
