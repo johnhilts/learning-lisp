@@ -155,4 +155,16 @@
       (push (list dna-base (complement-base dna-base))
 	    double-strand))))
 
+(defun count-bases (dna-strand)
+  "accept single or double-strands"
+  (let ((counts nil))
+    (dolist (dna-base dna-strand counts)
+      (cond ((listp dna-base) nil)
+	    (t (if (find-if #'(lambda (e) (equal (car e) dna-base)) counts)
+		   (mapcar #'(lambda (e)
+			       (if (equal (car e) dna-base)
+				   (incf (cadr e))))
+			   counts)
+		   (push (list dna-base 1) counts)))))))
+
 
