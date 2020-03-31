@@ -187,3 +187,11 @@
 				   (incf (cadr e))))
 			   counts)
 		   (push (list dna-base 1) counts))))))))
+
+(defun prefixp (possible-prefix dna-strand)
+  (do ((prefix? possible-prefix (cdr prefix?))
+       (dna dna-strand (cdr dna))
+       (is-prefix t))
+      ((null prefix?) is-prefix)
+    (unless (equal (car prefix?) (car dna))
+      (setf is-prefix nil))))
