@@ -148,3 +148,11 @@
     (dolist (dna-base dna-strand (nreverse strand))
       (push (complement-base dna-base) strand))))
 
+(defun make-double (dna-strand)
+  "return a list of dna-complement pairs"
+  (let ((double-strand nil))
+    (dolist (dna-base dna-strand (nreverse double-strand))
+      (push (list dna-base (complement-base dna-base))
+	    double-strand))))
+
+
