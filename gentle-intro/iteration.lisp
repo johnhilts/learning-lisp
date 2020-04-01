@@ -236,3 +236,8 @@
     (push (car dna) prefix)
     (when (coverp (reverse prefix) dna-strand)
       (return (reverse prefix)))))
+
+(defun book-kernel (strand) ; very elegant!
+  (do ((i 1 (+ i 1)))
+      ((coverp (prefix i strand) strand)
+       (prefix i strand))))
