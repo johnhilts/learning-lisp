@@ -212,7 +212,7 @@
 	(dotimes (i (length dna-strand) t)
 	  (push (car dna-strand) check-strand)
 	  (setf dna-strand (cdr dna-strand))
-	  (if (and (> i 1) (equal (mod (length check-strand) 3) 0))
+	  (if (equal (mod (length check-strand) (length repeated-dna?)) 0)
 	      (if (equal repeated-dna? (reverse check-strand))
 		  (setf check-strand nil)
 		  (return nil)))))))
@@ -227,3 +227,12 @@
 	(equal i n))
        (nreverse prefix-strand))
     (push (car dna) prefix-strand)))
+
+(defun kernel (dna-strand)
+  "get the shortest strand that will cover the entire sequence"
+  (do ((dna dna-strand (cdr dna))
+       (prefix nil))
+      ((null dna) (reverse prefix))
+    (push (car dna) prefix)
+    (when (coverp (reverse prefix) dna-strand)
+      (return (reverse prefix)))))
