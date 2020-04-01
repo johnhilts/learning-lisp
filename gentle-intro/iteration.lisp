@@ -202,3 +202,28 @@
       ((null dna) nil)
     (if (prefixp search-dna dna)
 	(return t))))
+
+(defun coverp (repeated-dna? dna-strand)
+  "is dna strand a collection of repeated strands?"
+  (if (and
+       (prefixp repeated-dna? dna-strand)
+       (equal (mod (length dna-strand) (length repeated-dna?)) 0))
+      (let ((check-strand nil))
+	(dotimes (i (length dna-strand) t)
+	  (push (car dna-strand) check-strand)
+	  (setf dna-strand (cdr dna-strand))
+	  (if (and (> i 1) (equal (mod (length check-strand) 3) 0))
+	      (if (equal repeated-dna? (reverse check-strand))
+		  (setf check-strand nil)
+		  (return nil)))))))
+
+(defun prefix (n dna-strand)
+  "get n left most dna bases of dna-strand"
+  (do ((dna dna-strand (cdr dna))
+       (i 0 (+ 1 i))
+       (prefix-strand nil))
+      ((or
+	(null dna)
+	(equal i n))
+       (nreverse prefix-strand))
+    (push (car dna) prefix-strand)))
