@@ -241,3 +241,36 @@
   (do ((i 1 (+ i 1)))
       ((coverp (prefix i strand) strand)
        (prefix i strand))))
+
+(defun draw-dna (dna-strand)
+  #||
+  format:
+  ---------------------------------------------
+  ! ! ! ! ! ! ! ! !
+  A G G T C A T T G
+  . . . . . . . . .
+  . . . . . . . . .
+  T C C A G T A A C
+  ! ! ! ! ! ! ! ! !
+  ---------------------------------------------
+  ||#
+  (format t "~&---------------------------------------------")
+  (format t "~%  ")
+  (dotimes (i (length dna-strand))
+    (format t "!    "))
+  (format t "~%  ")
+  (dolist (e dna-strand)
+    (format t "~s    " e))
+  (format t "~%  ")
+  (dotimes (i (length dna-strand))
+    (format t ".    "))
+  (format t "~%  ")
+  (dotimes (i (length dna-strand))
+    (format t ".    "))
+  (format t "~%  ")
+  (dolist (e (complement-strand dna-strand))
+    (format t "~s    " e))
+  (format t "~%  ")
+  (dotimes (i (length dna-strand))
+    (format t "!    "))
+  (format t "~&---------------------------------------------"))
