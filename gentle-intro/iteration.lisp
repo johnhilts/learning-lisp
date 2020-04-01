@@ -246,12 +246,12 @@
   #||
   format:
   ---------------------------------------------
-  ! ! ! ! ! ! ! ! !
-  A G G T C A T T G
-  . . . . . . . . .
-  . . . . . . . . .
-  T C C A G T A A C
-  ! ! ! ! ! ! ! ! !
+  !    !    !    !    !    !    !    !    !    
+  A    G    G    T    C    A    T    T    G    
+  .    .    .    .    .    .    .    .    .    
+  .    .    .    .    .    .    .    .    .    
+  T    C    C    A    G    T    A    A    C    
+  !    !    !    !    !    !    !    !    !    
   ---------------------------------------------
   ||#
   (labels ((draw-line (length)
@@ -281,3 +281,4 @@
       (draw-line-break)
       (draw-decoration "!" length)
       (draw-line length)))))
+
