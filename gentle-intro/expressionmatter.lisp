@@ -4,10 +4,10 @@
 	     (cond ((null list) 0)
 		   (t (max (car list) (rec-max (cdr list)))))))
     (let ((funs (list
-		 #'(lambda () (* a b c))
-		 #'(lambda () (+ a b c))
-		 #'(lambda () (* (+ a b) c))
-		 #'(lambda () (* a (+ b c))))))
-      (rec-max (mapcar #'(lambda (e) (funcall e)) funs)))))
+		 #'(lambda (x y z) (* x y z))
+		 #'(lambda (x y z) (+ x y z))
+		 #'(lambda (x y z) (* (+ x y) z))
+		 #'(lambda (x y z) (* x (+ y z))))))
+      (rec-max (mapcar #'(lambda (e) (funcall e a b c)) funs)))))
 
 
