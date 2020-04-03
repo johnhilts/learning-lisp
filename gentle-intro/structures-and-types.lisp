@@ -59,3 +59,28 @@
 		(process-node (node-yes-case node))
 		(process-node (node-no-case node)))))))
 
+(defstruct captain
+	   (name nil) ; you can explicity use nil as the default
+	   (age) ; ... or not
+	   (ship))
+
+(defstruct starship
+  (name nil)
+  (speed 0)
+  (condition 'green)
+  (shields 'down)
+  (captain))
+
+(defun print-starship (x stream depth)
+  (format stream "#<STARSHIP ~A>"
+	  (starship-name x)))
+
+(defstruct (starship
+	     (:print-function print-starship))
+  (captain nil)
+  (name nil)
+  (shields ’down)
+  (condition ’green)
+  (speed 0))
+
+(defvar s1 (make-starship :name "Enterprise"))
