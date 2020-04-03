@@ -50,12 +50,12 @@
       (return node))))
 
 (defun process-node (name)
-  (let ((node (find-node name *node-list*)))
-    (if (null node)
-	(format t "~s was not found" name)
-	(progn
-	  (format t "~s " (node-question node))
-	  (let ((reply (read)))
-	    (if (equal reply 'y)
+  (if (stringp name)
+      (format t "~&~s~%" name)
+      (let ((node (find-node name *node-list*)))
+	(if (null node)
+	    (format t "~s was not found" name)
+	    (if (y-or-n-p (node-question node))
 		(process-node (node-yes-case node))
-		(process-node (node-no-case node))))))))
+		(process-node (node-no-case node)))))))
+
