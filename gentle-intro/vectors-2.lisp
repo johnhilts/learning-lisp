@@ -55,3 +55,32 @@
 (defun get-first-char (x)
   (char-downcase
    (char (format nil "~A" x) 0))) ; AFAICT format isn't necessary for this
+
+(defun read-letter ()
+  (format t "~&Input string: ")
+  (let ((input (read)))
+    (cond ((or
+	    (equal input 'end)
+	    (equal input 'undo))
+	   input)
+	  (t (get-first-char input)))))
+
+(defun sub-letter (code)
+  "substitute a letter"
+  (let ((clear (gethash code *decipher-table*)))
+    (if clear
+	(format t "~s has already been deciphered as ~s" code clear)
+	(progn
+	  (format t "What does ~s decipher to?" code)
+	  (let* ((decipher-to (read))
+		(clear (gethash decipher-to *decipher-table*)))
+	    (if clear
+		(format t "Entry already exists")
+		(make-substitution code clear)))))))
+
+(defun print-hash-table (hash-table)
+  (maphash #'(lambda (key value)
+	       (format t "~4S => ~S~%" key value))
+	   hash-table))
+
+
