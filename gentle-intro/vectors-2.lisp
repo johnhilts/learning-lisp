@@ -33,19 +33,25 @@
 	    (setf (aref new-string i) clear))))))
 
 (defun show-line ()
-  (labels ((show-each-line (lines)
+  (labels (
+	   (show-formatted-line (line)
+	     (format t "~s~%" line)
+	     (let ((len (length line)))
+	       (dotimes (i len)
+		 (let ((clear
+			(gethash
+			 (gethash
+			  (aref line i) *encipher-table*) *decipher-table*)))
+		   (if clear
+		       (format t "~s" clear))))))
+
+	   (show-each-line (lines)
 	     (cond ((null lines) (format t "~%"))
-		   (t
-		    (let ((text (car lines)))
-		      (format t "~s~%" text)
-		      (let ((len (length text)))
-			(dotimes (i len)
-			  (let ((clear
-				 (gethash
-				  (gethash
-				   (aref text i) *encipher-table*) *decipher-table*)))
-			    (if clear
-				(Format t "~s" clear))
-			    ))))
-		    (show-each-line (cdr lines))))))
+		   (t (show-formatted-line (car lines))
+		      (show-each-line (cdr lines))))))
+
     (show-each-line crypto-text)))
+
+(defun get-first-char (x)
+  (char-downcase
+   (char (format nil "~A" x) 0))) ; AFAICT format isn't necessary for this
