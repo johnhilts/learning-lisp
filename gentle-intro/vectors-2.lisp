@@ -33,9 +33,19 @@
 	    (setf (aref new-string i) clear))))))
 
 (defun show-line ()
-  (format t "~s~%" crypto-text)
-  (let ((len (length crypto-text)))
-    (dotimes (i len)
-      (format t "~s" (gethash
-		      (gethash
-		       (aref crypto-text i) *encipher-table*) *decipher-table*)))))
+  (labels ((show-each-line (lines)
+	     (cond ((null lines) (format t "~%"))
+		   (t
+		    (let ((text (car lines)))
+		      (format t "~s~%" text)
+		      (let ((len (length text)))
+			(dotimes (i len)
+			  (let ((clear
+				 (gethash
+				  (gethash
+				   (aref text i) *encipher-table*) *decipher-table*)))
+			    (if clear
+				(Format t "~s" clear))
+			    ))))
+		    (show-each-line (cdr lines))))))
+    (show-each-line crypto-text)))
