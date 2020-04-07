@@ -12,3 +12,6 @@
 	      (pprint exp)))
      (format t "~%~%")
      (values)))
+
+(defmacro set-nil (var)
+  (list 'setq var nil))
