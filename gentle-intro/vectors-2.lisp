@@ -14,10 +14,10 @@
   (setf (gethash code *decipher-table*) clear)
   (setf (gethash clear *encipher-table*) code))
 
-(defun undo-substitution (code)
-  (let ((clear (gethash code *decipher-table*)))
-    (setf (gethash code *decipher-table*) nil)
-    (setf (gethash clear *encipher-table*) nil)))
+(defun undo-substitution (clear)
+  (let ((code (gethash clear *decipher-table*)))
+    (setf (gethash code *encipher-table*) nil)
+    (setf (gethash clear *decipher-table*) nil)))
 
 (defun clear ()
   (clrhash *encipher-table*)
@@ -32,32 +32,32 @@
 	(if clear
 	    (setf (aref new-string i) clear))))))
 
-(defun show-line ()
+(defun show-line (cryptogram)
   (labels (
 	   (show-formatted-line (line)
-	     (format t "~s~%" line)
+	     (format t "~a~%" line)
 	     (let ((len (length line)))
 	       (dotimes (i len)
 		 (let ((clear
-			(gethash
-			 (gethash
-			  (aref line i) *encipher-table*) *decipher-table*)))
+			 (gethash (aref line i) *decipher-table*)))
 		   (if clear
-		       (format t "~s" clear))))))
+		       (format t "~a" clear)
+		       (format t " ")))))
+	     (format t "~%"))
 
 	   (show-each-line (lines)
 	     (cond ((null lines) (format t "~%"))
 		   (t (show-formatted-line (car lines))
 		      (show-each-line (cdr lines))))))
 
-    (show-each-line crypto-text)))
+    (show-each-line cryptogram)))
 
 (defun get-first-char (x)
   (char-downcase
    (char (format nil "~A" x) 0))) ; AFAICT format isn't necessary for this
 
 (defun read-letter ()
-  (format t "~&Input string: ")
+  (format t "~&Input a letter:~%")
   (let ((input (read)))
     (cond ((or
 	    (equal input 'end)
@@ -65,22 +65,43 @@
 	   input)
 	  (t (get-first-char input)))))
 
-(defun sub-letter (code)
+(defun sub-letter (code-string)
   "substitute a letter"
-  (let ((clear (gethash code *decipher-table*)))
+  (let* ((code (get-first-char code-string))
+	 (clear (gethash code *decipher-table*)))
     (if clear
-	(format t "~s has already been deciphered as ~s" code clear)
+	(format t "'~a' has already been deciphered as '~a'." code clear)
 	(progn
-	  (format t "What does ~s decipher to?" code)
-	  (let* ((decipher-to (read))
-		(clear (gethash decipher-to *decipher-table*)))
+	  (format t "What does ~a decipher to?~%" code)
+	  (let* ((decipher-to-string (read))
+		 (decipher-to (get-first-char decipher-to-string))
+		 (clear (gethash decipher-to *encipher-table*)))
 	    (if clear
-		(format t "Entry already exists")
-		(make-substitution code clear)))))))
+		(format t "'~a' already deciphers to ~a~%" clear decipher-to)
+		(make-substitution code decipher-to)))))))
 
 (defun print-hash-table (hash-table)
   (maphash #'(lambda (key value)
 	       (format t "~4S => ~S~%" key value))
 	   hash-table))
 
+(defun undo-letter ()
+  (format t "Undo which letter?~%")
+  (let* ((undo (get-first-char (read)))
+	 (clear (gethash undo *decipher-table*)))
+    (if clear
+	(undo-substitution undo)
+	(format t "No entry found for '~a'." undo))))
 
+(defun solve (cryptogram)
+  (show-line cryptogram)
+  (format t "Sustitute which letter?~%")
+  (let ((input (read-letter)))
+    (cond ((equal 'end input) t)
+	  ((equal 'undo input)
+	   (undo-letter)
+	   (solve cryptogram))
+	  ((characterp input)
+	   (sub-letter input)
+	   (solve cryptogram))
+	  (t (format t "Error")))))
