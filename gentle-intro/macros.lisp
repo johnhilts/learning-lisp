@@ -29,3 +29,8 @@
 	 (d ,b))
      (setq ,a d)
      (setq ,b c)))
+
+(defmacro set-mutual (a b)
+  `(progn
+    (setq ,a 'b)
+    (setq ,b 'a)))
