@@ -23,3 +23,9 @@
 (defmacro simpler-incf (var &optional (amount 1))
   "using back-tick and , for unquote"
   `(setq ,var (+ ,var ,amount)))
+
+(defmacro simple-rotatef (a b)
+  `(let ((c ,a)
+	 (d ,b))
+     (setq ,a d)
+     (setq ,b c)))
