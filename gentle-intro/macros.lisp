@@ -34,3 +34,25 @@
   `(progn
     (setq ,a 'b)
     (setq ,b 'a)))
+
+; my version
+(defmacro variable-chain (&rest variables)
+  `(cond
+     ((null '(,@variables))
+      nil)
+     ((null (cdr '(,@variables)))
+      nil)
+     ((null (cadr '(,@variables)))
+      nil)
+     (t (defvar ,(car variables) ',(cadr `,variables))
+	(variable-chain (cdr '(,@variables))))))
+
+; book version
+(defmacro variable-chain-book (&rest vars)
+  `(progn
+     ,@(do ((v vars (rest v))
+	    (res nil))
+	   ((null (rest v)) (reverse res))
+	 (push `(setf ,(first v)
+		      ',(second v))
+		res))))
