@@ -50,3 +50,18 @@ I want to see what the difference is by switching them around in some macros I f
 #||
 So ... maybe if it's a quoted list (hard-coded list), use `...,
 If it's a generated list - such as from a &rest param, or a (mapcar), or even (do), then use `...,@
+
+ok, I found something that explained the difference clearly!!
+`..., will get the value of whatever it's unquoting!
+`...,@ will get the ELEMENTS of a list!
+example using a list:
+||#
+
+(defmacro my-cool-macro (&rest list)
+  `(progn
+    (format t "~s" (append '(1 2 3) ,@list)) ; don't use IO in normal macros!
+    (setf list-from-a-macro ,@list)))
+
+(defvar my-example-list '(1 2 3))
+(my-cool-macro my-example-list)
+
