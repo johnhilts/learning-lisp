@@ -49,10 +49,14 @@
 
 ; book version
 (defmacro variable-chain-book (&rest vars)
-  `(progn
-     ,@(do ((v vars (rest v))
-	    (res nil))
-	   ((null (rest v)) (reverse res))
-	 (push `(setf ,(first v)
-		      ',(second v))
-		res))))
+  `(progn ; why is this necessary?!? because without it you'd have (,@do and get "illegal functiona call"
+     ,@(do ((v vars (rest v)) ; set v; how to increment v
+	    (res nil)) ; create variable res
+	   ((null (rest v)) (reverse res)) ; end condition + consequence which is returned
+	 (push `(setf ,(first v) ',(second v)) res)))) ; the ', is because we're assigning the symbol as the value
+; this is supposed to expand to (setf a = 'b)
+
+; &aux is like the lambda-list version of let*
+(defun average (&rest args
+		&aux (len (length args))) ; args is defined earlier in the lambda-list
+  (/ (reduce #'+ args) len 1.0))
