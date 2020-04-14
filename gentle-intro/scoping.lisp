@@ -21,4 +21,5 @@ But inside test-dynamic, a local variable is declared that overrides it. Even wh
 "fish", which wasn't declared with defvar, works the "normal" way (lexical scoping).
 Why would you ever use defvar?
 Why do global variables declared with setf cause a warning in sbcl??
+Note: dynamically scoped variables are also called "special variables"
 ||#
