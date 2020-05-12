@@ -65,3 +65,15 @@ example using a list:
 (defvar my-example-list '(1 2 3))
 (my-cool-macro my-example-list)
 
+(defun $ (text s1 s2)
+  (format t text s1 s2))
+
+(defun string-interpolation (list)
+  (cond ((null list)
+	 nil)
+	(t (concatenate 'string (car list)
+			($ (cdr list))))))
+
+(defmacro $ (list)
+  `(string-interpolation (list ,@list)))
+
