@@ -19,5 +19,6 @@
 (defun scrape ()
   (let* ((pattern (ppcre:create-scanner "[\\w_-]+\\.html"))
          (links (get-links 0 pattern)))
-    (with-open-file (stream *link-file* :direction :output :if-exists :supersede)
+    (with-open-file
+        (stream *link-file* :direction :output :if-exists :supersede)
       (format stream "~{~&~a~}" links))))
