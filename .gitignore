@@ -1,3 +1,4 @@
 *.swp
 *~
 *.wx64fsl
+experiments/*.html
