@@ -31,6 +31,8 @@
 (defmacro+ps slideshow-image-uri (slideshow-name image-file)
   `(concatenate 'string "/slideshow-images/" ,slideshow-name "/" ,image-file))
 
+(defmacro+ps psreturn (object) `(return ,object))
+
 (defun slideshow-handler ()
   (cl-ppcre:register-groups-bind (slideshow-name)
       ("/slideshows/(.*)" (script-name*))
@@ -73,13 +75,13 @@
                 (:a :href (format nil "/slideshows/~a?image=~a"
                                   slideshow-name
                                   (elt images previous-image-index))
-                    :onclick (ps (previous-image) (return false))
+                    :onclick (ps (return (block jsa (previous-image) (return-from jsa f))))
                     "Previous")
                 " "
                 (:a :href (format nil "/slideshows/~a?image=~a"
                                   slideshow-name
                                   (elt images next-image-index))
-                    :onclick (ps (next-image) (return false))
+                    :onclick (ps (return (block jsa (next-image) (return-from jsa f))))
                     "Next"))))))))
 
 
