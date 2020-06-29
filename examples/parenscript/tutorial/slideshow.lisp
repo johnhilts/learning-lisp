@@ -25,7 +25,7 @@
          image-folder)
         *dispatch-table*))
 
-(add-slideshow "lolcat" "/home/jfh/Pictures/")
+(add-slideshow "lolcat" "/home/jfh/sda4/Users/John/Downloads/Personal/")
 (add-slideshow "lolrus" "/home/jfh/code/csharp/")
 
 (defmacro+ps slideshow-image-uri (slideshow-name image-file)
@@ -34,12 +34,14 @@
 (defun slideshow-handler ()
   (cl-ppcre:register-groups-bind (slideshow-name)
       ("/slideshows/(.*)" (script-name*))
-    (let* ((images (mapcar
-                    (lambda (i) (url-encode (file-namestring i)))
-                    (cl-fad:list-directory
-                     (or (gethash slideshow-name *slideshows*)
-                         (progn (setf (return-code*) 404)
-                                (return-from slideshow-handler))))))
+    (let* ((images (remove-if-not
+                    (lambda (e) (or (search ".png" e) (search ".jpg" e)))
+                    (mapcar
+                     (lambda (i) (url-encode (file-namestring i)))
+                     (cl-fad:list-directory
+                      (or (gethash slideshow-name *slideshows*)
+                          (progn (setf (return-code*) 404)
+                                 (return-from slideshow-handler)))))))
            (current-image-index
             (or (position (url-encode (or (get-parameter "image") ""))
                           images
