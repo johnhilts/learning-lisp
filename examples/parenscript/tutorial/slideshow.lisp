@@ -31,8 +31,6 @@
 (defmacro+ps slideshow-image-uri (slideshow-name image-file)
   `(concatenate 'string "/slideshow-images/" ,slideshow-name "/" ,image-file))
 
-(defmacro+ps psreturn (object) `(return ,object))
-
 (defun slideshow-handler ()
   (cl-ppcre:register-groups-bind (slideshow-name)
       ("/slideshows/(.*)" (script-name*))
