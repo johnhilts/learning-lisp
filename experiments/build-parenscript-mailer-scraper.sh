@@ -1,0 +1,1 @@
+sbcl --noinform --eval "(ql:quickload :cl-ppcre)" --eval "(ql:quickload :drakma)" --load "/home/jfh/code/lisp/source/learning-lisp/experiments/scrape-parenscript-mailer.lisp" --eval "(sb-ext:save-lisp-and-die \"scrape-parenscript-mailer.exe\" :executable t :toplevel 'scrape-parenscript-mailer:scrape)"
