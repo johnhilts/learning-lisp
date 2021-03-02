@@ -1,20 +1,42 @@
-;;; write COPY-LIST and REVERSE for lists using reduce
-;;; COPY-LIST returns a new copy of a list
-;;; (EQUAL list (COPY-LIST list)) => T
-;;; (EQL list (COPY-LIST list)) => NIL, unless list itself is NIL
 (in-package #:acl-exercises)
 
-(defun copy-list-with-reduce (list)
-  (reverse ;; the element order has to match for EQUAL to work
-   (reduce
-    #'(lambda (acc cur)
-        (cons cur acc))
-    list :initial-value ())))
+(defun map-hash-table-to-alist (ht)
+  "convert a hashtable into a new alist"
+  (let ((alist ()))
+    (maphash
+     #'(lambda (k v)
+	 (setf alist (acons k v alist)))
+     ht)
+    (reverse alist)))
 
-(defun test-copy-list ()
-  (let* ((old-list (list 'one 'two 'three))
-         (new-list (copy-list-with-reduce old-list)))
-    (format t "equal should be t: ~a~%" (equal old-list new-list))
-    (format t "eql should be nil: ~a~%" (eql old-list new-list))))
+(defun test-ht-2-al ()
+  (let ((ht (make-hash-table)))
+    (setf (gethash 'one ht) 1
+	  (gethash 'two ht) 2
+	  (gethash 'three ht) 3)
+    (maphash #'(lambda (k v) (format t "key: ~a value: ~a~%" k v)) ht)
+    (mapc
+     #'(lambda (e)
+	 (format t "key: ~a value: ~a~%" (car e) (cdr e)))
+     (map-hash-table-to-alist ht))))
 
-(test-copy-list)
+(test-ht-2-al)
+
+(defun map-alist-to-hash-table (alist)
+  "convert an alist into a hashtable"
+  (let ((ht (make-hash-table)))
+    (mapc
+     #'(lambda (e)
+	 (setf (gethash (car e) ht) (cdr e)))
+     alist)
+    ht))
+
+(defun test-al-2-ht ()
+  (let ((alist '((one . 1) (two . 2) (three . 3))))
+    (mapc
+     #'(lambda (e)
+	 (format t "key: ~a value: ~a~%" (car e) (cdr e)))
+     alist)
+    (maphash #'(lambda (k v) (format t "~&key: ~a value: ~a~%" k v)) (map-alist-to-hash-table alist))))
+
+(test-al-2-ht)
