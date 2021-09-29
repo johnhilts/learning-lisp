@@ -29,3 +29,4 @@ production/**
 *~
 *.wx64fsl
 experiments/*.html
+examples/**
