@@ -94,3 +94,22 @@
 
 ;; tiny try/catch style wrapping 
 (mapcar (lambda (arg) (handler-case (symbol-name arg) (type-error (err) err))) '(1 deux "trois" :quatre))
+
+(defun signed (doc)
+  (format t "~a signed!~%" doc)
+  t)
+
+(defun sealed (doc)
+  (format t "~a sealed!~%" doc)
+  t)
+
+(defun delivered (doc)
+  (format t "~a delivered!~%" doc)
+  t)
+
+(defun fint (fn &rest fns)
+  (if (null fns)
+      fn
+      (let ((chain (apply #'fint fns)))
+        #'(lambda (x)
+            (and (funcall fn x) (funcall chain x))))))
