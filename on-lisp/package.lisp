@@ -94,3 +94,83 @@
 			  #'(lambda ()
 			      (self (cdr lst)))))))
     #'self))
+
+(defmacro when-bind ((var expr) &body body)
+  `(let ((,var ,expr))
+     (when ,var
+       ,@body)))
+;; example - note parenthesis around 1st 2 arguments
+(when-bind (x 4)
+  (+ x 3))
+
+(defmacro when-bind2 (var expr &body body) ; <-- removed parenthesis here
+  `(let ((,var ,expr))
+     (when ,var
+       ,@body)))
+;; example - note lack of parenthesis around 1st 2 arguments
+(when-bind2 x 4
+  (+ x 3))
+
+(defmacro in-if (fn &rest choices)
+  (let ((fnsym (gensym)))
+    `(let ((,fnsym ,fn))
+       (or ,@(mapcar #'(lambda (c)
+                         `(funcall ,fnsym ,c))
+                     choices)))))
+
+(defmacro in-if-bad? (fn &rest choices)
+  `(or ,@(mapcar #'(lambda (c)
+                     `(funcall ,fn ,c))
+                 choices)))
+
+(defun stop-fn (x stop)
+  (and (oddp x) (> x stop)))
+
+(defmacro for ((var start stop) &body body)
+  (let ((gstop (gensym)))
+    `(do ((,var ,start (1+ ,var))
+          (,gstop ,stop))
+         ((> ,var ,gstop))
+       ,@body)))
+
+(defmacro for-bad ((var start stop) &body body)
+  `(do ((,var ,start (1+ ,var))
+        (limit ,stop))
+       ((> ,var limit))
+     ,@body))
+
+(defmacro for-test ((var start stop) &body body)
+  `(do ((,var ,start (1+ ,var)))
+       ((> ,var ,stop))
+     ,@body))
+
+;; get exported symbol info
+(LET ((count 0)
+      (external-symbols ()))
+  (DO-EXTERNAL-SYMBOLS (THIS 'CL count)
+    (INCF count)
+    (push this external-symbols))
+  (format t "~&count: ~d~%Some external symbols: ~%~a~%" count (mapcar (lambda (e) (format nil "~a~%" e)) (subseq external-symbols 0 10))))
+
+;; tiny try/catch style wrapping 
+(mapcar (lambda (arg) (handler-case (symbol-name arg) (type-error (err) err))) '(1 deux "trois" :quatre))
+
+(defun signed (doc)
+  (format t "~a signed!~%" doc)
+  t)
+
+(defun sealed (doc)
+  (format t "~a sealed!~%" doc)
+  t)
+
+(defun delivered (doc)
+  (format t "~a delivered!~%" doc)
+  t)
+
+(defun fint (fn &rest fns)
+  (if (null fns)
+      fn
+      (let ((chain (apply #'fint fns)))
+        #'(lambda (x)
+            (and (funcall fn x) (funcall chain x))))))
+
