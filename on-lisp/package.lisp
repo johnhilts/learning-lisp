@@ -35,66 +35,6 @@
                 'b
                 '(a b)))
 
-(defun compose (&rest fns)
-  "1. take a list of functions
-   2. arrange them the way you want - call them in order from the last to the first
-   3. then return a lambda that does 1 & 2
-   4. the lambda will take whatever arguments are given to the returned function"
-  (if fns
-      (let ((fn1 (car (last fns)))
-	    (fns (butlast fns)))
-	#'(lambda (&rest args)
-	    (reduce #'funcall fns
-		      :from-end t
-		      :initial-value (apply fn1 args))))
-      #'identity))
-
-
-(defun jfh-compose (&rest functions)
-  (format t "functions count: ~d~%" (length functions))
-  #'(lambda (&rest args)
-      (format t "arg count: ~d~%" (length args))))
-
-(defun signed (doc)
-  (format t "~&doc = ~a~%" doc)
-  (cond
-    ((string= "doc1" doc) t)
-    ((string= "doc3" doc) t)
-    (t nil)))
-
-(defun sealed (doc)
-  (format t "~&doc = ~a~%" doc)
-  (cond
-    ((string= "doc2" doc) t)
-    ((string= "doc3" doc) t)
-    (t nil)))
-
-(defun delivered (doc)
-  (format t "~&doc = ~a~%" doc)
-  (cond
-    ((string= "doc2" doc) t)
-    ((string= "doc3" doc) t)
-    (t nil)))
-
-(defun fint (fn &rest fns)
-  (if (null fns)
-      fn
-      (let ((chain (apply #'fint fns)))
-	#'(lambda (x)
-	    (and (funcall fn x) (funcall chain x))))))
-
-(defun lrec (rec &optional base)
-  "list recursor"
-  (labels ((self (lst)
-	     (if (null lst)
-		 (if (functionp base)
-		     (funcall base)
-		     base)
-		 (funcall rec (car lst)
-			  #'(lambda ()
-			      (self (cdr lst)))))))
-    #'self))
-
 (defmacro when-bind ((var expr) &body body)
   `(let ((,var ,expr))
      (when ,var
@@ -174,3 +114,71 @@
         #'(lambda (x)
             (and (funcall fn x) (funcall chain x))))))
 
+(defun mkstr (&rest args)
+  (with-output-to-string (s)
+    (dolist (a args) (princ a s))))
+
+(defun symb (&rest args)
+  (values (intern (apply #'mkstr args))))
+
+(defmacro with-struct ((name . fields) struct &body body)
+  (let ((gs (gensym)))
+    `(let ((,gs ,struct))
+       (let ,(mapcar #'(lambda (f)
+                         `(,f (,(symb name f) ,gs)))
+                       fields)
+         ,@body))))
+
+;; examples
+(defstruct visitor name title firm)
+(setq theo (make-visitor :name "Theodebert"
+                         :title 'king
+                         :firm 'franks))
+
+(with-struct (visitor- name firm title) theo
+  (list name firm title))
+
+(defun destruc (pat seq &optional (atom? #'atom) (n 0))
+  (if (null pat)
+      nil
+      (let ((rest (cond ((funcall atom? pat) pat)
+                        ((eq (car pat) '&rest) (cadr pat))
+                        ((eq (car pat) '&body) (cadr pat))
+                        (t nil))))
+        (if rest
+            `((,rest (subseq ,seq ,n)))
+             (let ((p (car pat))
+                   (rec (destruc (cdr pat) seq atom? (1+ n))))
+               (if (funcall atom? p)
+                   (cons `(,p (elt ,seq ,n))
+                          rec)
+                   (let ((var (gensym)))
+                     (cons (cons `(,var (elt ,seq ,n))
+                                  (destruc p var atom?))
+                           rec))))))))
+
+(defun wplac-ex (binds body)
+  (if (null binds)
+      `(progn ,@body)
+       `(symbol-macrolet ,(mapcar #'(lambda (b)
+                                      (if (consp (car b))
+                                          (car b)
+                                          b))
+                                    binds)
+          ,(wplac-ex (mapcan #'(lambda (b)
+                                 (if (consp (car b))
+                                     (cdr b)))
+                               binds)
+                     body))))
+
+(defmacro with-places (pat seq &body body)
+  (let ((gseq (gensym)))
+    `(let ((,gseq ,seq))
+       ,(wplac-ex (destruc pat gseq #'atom) body))))
+
+;; examples
+(let ((lst '(1 (2 3) 4)))
+  (with-places (a (b . c) d) lst
+               (setf a 'uno)
+               (setf c '(tre)))
+  lst)
