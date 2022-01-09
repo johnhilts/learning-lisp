@@ -40,3 +40,15 @@ if a parent is missing."
 ;;   1 2  1
 ;; 1  3  3 1
 ;;1 4  6  4 1
+
+(defun inc (n)
+  (incf n))
+
+(defun square (n) (* n n))
+
+(defun compose (f g)
+  (lambda (x) (funcall f (funcall g x))))
+
+;; (funcall (compose #'square #'inc) 6)
+;; => 49
+;; note: I hadn't realized that it was necessary to use #'funcall on a lambda!!
