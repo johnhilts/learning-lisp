@@ -52,3 +52,14 @@ if a parent is missing."
 ;; (funcall (compose #'square #'inc) 6)
 ;; => 49
 ;; note: I hadn't realized that it was necessary to use #'funcall on a lambda!!
+
+(defun repeated (f n)
+  (cond
+    ((= n 1)
+     #'(lambda (x)
+         (funcall f x)))
+    (t (compose ;; remember, compose just takes 2 functions, that's it!
+        f
+        (repeated f (- n 1))))))
+;; (funcall (repeated #'square 2) 5)
+;; => 625
