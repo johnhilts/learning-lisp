@@ -81,3 +81,23 @@
 ;; (setf x (list (list 1 2) (list 3 4)))
 ;; (deep-reverse x)
 ;; => ((4 3) (2 1))
+
+(defun fringe (items)
+  "Takes a tree (represented as a list) as an argument and returns a list whose elements are all the leaves of the tree arranged in left-to-right order."
+  (cond
+   ((null items)
+    '())
+   ((not (consp items))
+    (list items))
+   (t
+    (append
+     (fringe (car items))
+     (fringe (cdr items))))))
+
+;; (setf 2-28 (list (list 1 2) (list 3 4)))
+
+;; (fringe x)
+;; => (1 2 3 4)
+
+;; (fringe (list x x))
+;; => (1 2 3 4 1 2 3 4)
