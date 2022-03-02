@@ -101,3 +101,48 @@
 
 ;; (fringe (list x x))
 ;; => (1 2 3 4 1 2 3 4)
+
+;;  (square-tree (list 1 (list 2 (list 3 4) 5) (list 6 7)))
+;; => (1 (4 (9 16) 25) (36 49))
+
+(defun square-tree-with-recursion (tree)
+  "Squares all numbers in a tree while preserving the tree's structure."
+  (cond
+    ((null tree) ())
+    ((not (consp tree))
+     (* tree tree))
+    (t
+     (cons (square-tree-with-recursion (car tree)) (square-tree-with-recursion (cdr tree))))))
+
+(defun square-tree-with-map (tree)
+  "Squares all numbers in a tree while preserving the tree's structure."
+  (sicp-map
+   (lambda (sub-tree)
+     (if  (consp sub-tree)
+          (square-tree-with-map sub-tree)
+          (* sub-tree sub-tree)))
+   tree))
+
+(defun tree-map (proc tree)
+  "General-purpose tree mapping function."
+  (sicp-map
+   (lambda (sub-tree)
+     (if (consp sub-tree)
+          (tree-map proc sub-tree)
+          (funcall proc sub-tree)))
+   tree))
+
+;;; The below should work
+(defun square-it (item) (* item item))
+
+(defun square-tree-generalized (tree)
+  (tree-map #'square-it tree))
+
+(defun subsets (s)
+  (if (null s)
+      (list ())
+      (let ((rest (subsets (cdr s))))
+        (append rest (sicp-map (lambda (item) (cons (car s) item)) rest)))))
+
+;; (subsets (list 1 2 3))
+;; => (() (3) (2) (2 3) (1) (1 3) (1 2) (1 2 3))
