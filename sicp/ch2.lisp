@@ -146,3 +146,22 @@
 
 ;; (subsets (list 1 2 3))
 ;; => (() (3) (2) (2 3) (1) (1 3) (1 2) (1 2 3))
+
+(defun flatten-tree (tree)
+  (cond
+    ((null tree)
+     tree)
+    ((consp (car tree))
+     (append (flatten-tree (car tree)) (flatten-tree (cdr tree))))
+    (t tree)))
+
+(defun flatten-tree-with-map (tree)
+  (mapcar
+   #'(lambda (e)
+       (cond
+         ((null e)
+          e)
+         ((consp e)
+          (flatten-tree-with-map e))
+         (t e)))
+   tree))
